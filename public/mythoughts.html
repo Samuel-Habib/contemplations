@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thoughts</title>
+</head>
+<body>
+  <h1>Thoughts Collection</h1>
+  <ul id="thoughts-list"></ul>
+
+  <script>
+    // Fetch the thoughts data and display it in the HTML
+
+    fetch('/api/mythoughts')
+      .then(response => response.json())
+      .then(data => {
+        const thoughtsList = document.getElementById('thoughts-list');
+        data.forEach(thought => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `${thought.thought}`;
+          thoughtsList.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error fetching thoughts:', error));
+  </script>
+</body>
+</html>
