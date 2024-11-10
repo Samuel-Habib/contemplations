@@ -6,12 +6,15 @@
   <title>Thoughts</title>
 </head>
 <body>
+  <button class="home"> Home </button>
   <h1>Thoughts Collection</h1>
   <ul id="thoughts-list"></ul>
 
   <script>
     // Fetch the thoughts data and display it in the HTML
-
+  document.getElementsByClassName("home")[0].onclick = () => {
+          window.location.href = "/";
+      };
     fetch('/api/mythoughts')
       .then(response => response.json())
       .then(data => {
@@ -19,7 +22,23 @@
         data.forEach(thought => {
           const listItem = document.createElement('li');
           listItem.textContent = `${thought.thought}`;
-          thoughtsList.appendChild(listItem);
+          const button = document.createElement('button');
+          button.textContent = 'Delete';
+          button.onclick = async function() {
+              // Send a DELETE request to the server
+              const response = await fetch(`/api/thoughts/${thought._id}`, {
+                  method: 'DELETE'
+              });
+              if (response.ok) {
+                  // Remove the thought from the list
+                  thoughtsList.removeChild(listItem);
+              } else {
+                  console.error('Error deleting thought:', response.status);
+              }
+            };
+            listItem.insertBefore(button, listItem.firstChild);
+            listItem.insertBefore(document.createTextNode('  '), button.nextSibling); // Insert bigger space after button
+            thoughtsList.appendChild(listItem);
         });
       })
       .catch(error => console.error('Error fetching thoughts:', error));

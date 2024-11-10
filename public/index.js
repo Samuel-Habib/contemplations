@@ -4,7 +4,7 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const thoughtInput = document.getElementById('thoughtInput').value;
     try{
-        const response = await fetch('/submit', {
+        const response = await fetch('/submit/thought', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -22,3 +22,8 @@ form.addEventListener('submit', async (e) => {
 document.getElementById("mythoughts").onclick = () => {
     window.location.href = "/mythoughts";
 }
+
+document.getElementById("ideas").onclick = () => {
+    window.location.href = "/ideas";
+}
+

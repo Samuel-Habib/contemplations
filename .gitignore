@@ -10,10 +10,9 @@ logs
 npm-debug.log*
 
 # Unreleased
-ideas.html
 style.css
 comments.js
 
 # Unused
 dep.js
-db.js
+s.js
