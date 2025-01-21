@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
-    <form id="formField" action="/my-thoughts", method="post">
-        <input type="textBox" id="thoughtInput" placeholder="Have a thought? Write it here" required size="100px">
-        <button type="submit">Submit</button>
-        <button type="button" id="mythoughts" onclick="mythoughts"> My Thoughts </button>
-        <button type="button" id="ideas" > Ideas </button>
+    <form id="formField"  method="post">
+        <div class="form-group">
+            <textarea id="thoughtInput"  placeholder="Type here..."></textarea>
+            <!-- <span class="resizable-text-area">
+                <input type="textarea" id="thoughtInput" placeholder="Have a thought? Write it here" required size="100px">
+            </span> -->
+            <button type="submit">Submit</button>
+            <button type="button" id="mythoughts" onclick="mythoughts"> My Thoughts </button>
+            <button type="button" id="ideas" > Ideas </button>
+        </div>
+
     </form>
     <script src="index.js"></script>
 </body>

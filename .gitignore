@@ -16,3 +16,4 @@ comments.js
 # Unused
 dep.js
 s.js
+.DS_Store

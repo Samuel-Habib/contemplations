@@ -11,9 +11,9 @@ form.addEventListener('submit', async (e) => {
             },
             body: JSON.stringify({ thought: thoughtInput }),
         });
-        location.reload();
         const data = await response.json();
         console.log(data);
+        window.location.reload();
     } catch (error) {
         console.error('Error submitting task:', error);
     }

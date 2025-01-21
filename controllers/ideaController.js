@@ -1,7 +1,5 @@
 // controllers/ideaController.js
-const ideaModel = require('../models/ideaModel');
-const IdeaModel = require('../models/ideaModel');
-
+const ideaModel = require('../models/IdeaModel');
 
 exports.createIdea = async (req, res) => {
   try {
