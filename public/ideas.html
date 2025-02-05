@@ -8,83 +8,76 @@
 </head>
 <body>
 
-
-    <button class="home"> Home </button>
+    <button class="home">Home</button>
     <h1 id="response">Submit Your Ideas</h1>
 
     <!-- Form for submitting new ideas -->
     <form id="idea-form">
         <input type="text" id="idea-input" placeholder="Enter your idea" required>
-        <button type="submit">Submit idea</button>
+        <button type="submit">Submit Idea</button>
     </form>
 
     <!-- List to display ideas -->
-    <ul id="ideas-list">
-        <!-- Ideas will be appended here dynamically -->
-    </ul>
+    <ul id="ideas-list"></ul>
 
     <script>
-        // Fetch existing ideas and display them
         document.getElementsByClassName("home")[0].onclick = () => {
             window.location.href = "/";
         };
+
+        // Function to create an idea item with a delete button
+        function createIdeaElement(ideaObject) {
+            const listItem = document.createElement('li');
+            listItem.textContent = `${ideaObject.idea} `; // Add idea text
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = async function() {
+                const response = await fetch(`/api/ideas/${ideaObject._id}`, { method: 'DELETE' });
+                if (response.ok) {
+                    listItem.remove(); // Remove from DOM
+                } else {
+                    console.error('Error deleting idea:', response.status);
+                }
+            };
+
+            listItem.prepend(deleteButton);
+            return listItem;
+        }
+
+        // Fetch existing ideas
         fetch('/api/ideas')
             .then(response => response.json())
             .then(data => {
                 const ideasList = document.getElementById('ideas-list');
                 data.forEach(idea => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = `${idea.idea}`;
-                    const button = document.createElement('button');
-                    button.textContent = 'Delete';
-                    button.onclick = async function() {
-                        // Send a DELETE request to the server
-                        const response = await fetch(`/api/ideas/${idea._id}`, {
-                            method: 'DELETE'
-                        });
-                        if (response.ok) {
-                            // Remove the idea from the list
-                            ideasList.removeChild(listItem);
-                        } else {
-                            console.error('Error deleting idea:', response.status);
-                        }
-                    };
-                    listItem.insertBefore(button, listItem.firstChild);
-                    listItem.insertBefore(document.createTextNode('  '), button.nextSibling); // Insert bigger space after button
+                    const listItem = createIdeaElement(idea);
                     ideasList.appendChild(listItem);
                 });
             })
             .catch(error => console.error('Error fetching ideas:', error));
 
-        // Form submission event listener
+        // Submit form handler
         document.getElementById('idea-form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent default form submission
+            event.preventDefault();
 
             const ideaInput = document.getElementById('idea-input').value;
 
-            // Send the new idea to the server via POST request
+            // POST new idea
             fetch('/submit/ideas', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ idea: ideaInput })
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Idea submitted:', data);
-
-                // Append the new idea to the list
                 const ideaList = document.getElementById('ideas-list');
-                const newListItem = document.createElement('li');
-                newListItem.textContent = data.ideaObject.idea;  // Display the new idea
+                const newListItem = createIdeaElement(data.ideaObject);  // Add new idea with delete button
                 ideaList.appendChild(newListItem);
 
-                // Clear the input field after submission
-                document.getElementById('idea-input').value = '';
+                document.getElementById('idea-input').value = ''; // Clear input field
             })
             .catch(error => console.error('Error submitting idea:', error));
-            window.location.reload();
         });
     </script>
 </body>
